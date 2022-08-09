@@ -1,0 +1,268 @@
+
+{% extends 'school/teacherbase.html' %}
+{% load static %}
+{% block content %}
+
+  <head>
+    <title>Danh sách học sinh</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <section id="tabs" class="project-tab">
+      <div class="container-fluid">
+        <h1 class='text-center text-danger'>DANH SÁCH HỌC SINH</h1>
+        <div class="row mb-2 ml-4 mt-4">
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="triggerId"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {{khoi_status}}
+
+              
+            </button>
+            <div class="dropdown-menu " aria-labelledby="triggerId">
+              {% if list_khoi %} {% for khoi in list_khoi %}
+              <a
+                class="dropdown-item"                
+                href="{% url 'gv_khoi_filter' khoi.id %}"
+                >                
+                {{khoi.ten_khoi}}
+                </a
+              >
+              {% endfor %} {% endif %}
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="triggerId"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{lop_status}}
+              </button>
+              {%if list_lop%}
+              <div class="dropdown-menu" aria-labelledby="triggerId">
+                {%for lop in list_lop%}
+                <a
+                  class="dropdown-item btn btn-primary"
+                  href="{% url 'gv_lop_filter' lop.id %}"
+                  >
+                  {{lop.ten_lop}}
+                  </a
+                >
+                {%endfor%}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <div>
+            <form
+              class="row g-3 needs-validation"
+              action="
+              {% url 'teacher_search_hs' %}
+              "
+              method="GET"
+              name="teacher_search_hs"
+            >
+              <div class="input-group">
+                {{form_tk.tim_kiem_selector}} {{form_tk.chuoi_tim_kiem}}
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="submit">
+                    Tìm
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div>
+            <a href="
+            {% url 'export_hs' %}
+            " class="btn btn-info ml-4"
+              >Xuất Excel</a
+            >
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a
+                  class="nav-item nav-link active "
+                  id="nav-home-tab"
+                  data-toggle="tab"
+                  href="#nav-home"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="true"
+                  >Danh sách học sinh</a
+                >
+                <a
+                  class="nav-item nav-link"
+                  id="nav-profile-tab"
+                  data-toggle="tab"
+                  href="#nav-profile"
+                  role="tab"
+                  aria-controls="nav-profile"
+                  aria-selected="false"
+                  >Kết quả Học Tập</a
+                >
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="nav-home"
+                role="tabpanel"
+                aria-labelledby="nav-home-tab"
+              >
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">STT</th>
+                      <th scope="col">Mã Hs</th>
+                      <th scope="col">Lớp</th>
+                      <th scope="col">Họ Tên</th>
+                      <th scope="col">Ngày sinh</th>
+                      <th scope="col">Giới tính</th>
+                      <th scope="col">Địa chỉ</th>
+                      <th scope="col">Phụ huynh</th>
+                      <th scope="col">Số điện thoại</th>
+                      <th scope="col">Ghi chú</th>
+                      
+                      <th>Name</th>
+                      <th>Class</th>
+                      <th>Contact</th>
+                      <th>Fee</th>
+                      <th scope="col"></th>
+                      {% comment %} <th scope="col"></th> {% endcomment %}
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%if students%} {%for s in students%}
+                    <tr>
+                      <td>{{forloop.counter }}</td>
+                      <td>{{s.ma_hs}}</td>
+                      <td>{{s.ma_lop}}</td>
+                      <td>{{s.ho_ten}}</td>
+                      <td>{{s.ngay_sinh|date:"d/m/Y"}}</td>
+
+                      <td>{{s.gioi_tinh}}</td>
+                      <td>{{s.dia_chi}}</td>
+                      <td>{{s.ten_phu_huynh}}</td>
+                      <td>{{s.phone_phu_huynh}}</td>
+                      <td>{{s.ghi_chu}}</td>
+                      
+                      
+                      <td> {{s.get_name}}</td>
+                      <td>{{s.cl}}</td>
+                      <td>{{s.mobile}}</td>
+                      <td>{{s.fee}}</td>
+                      <td>
+                        <a href="{% url 'update-student' s.id  %}" class="btn btn-warning">Chỉnh sửa</a>
+                        <a href="{% url 'delete-student-from-school' s.id  %}" class="btn btn-danger">Xóa</a>
+                      </td>
+                    </tr>
+                    {% endfor %} {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-profile"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">STT</th>
+                      <th scope="col">Mã Hs</th>
+                      <th scope="col">Lớp</th>
+                      <th scope="col">Họ Tên</th>
+                      <th scope="col">Toán</th>
+                      <th scope="col">Lý</th>
+                      <th scope="col">Hóa</th>
+                      <th scope="col">Văn</th>
+                      <th scope="col">Ngoại ngữ</th>
+                      <th scope="col">TBM</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%if students%} {%for hs in students%}
+                    <tr>
+                      <td>{{forloop.counter }}</td>
+                      <td>{{hs.ma_hs}}</td>
+                      <td>{{hs.ma_lop}}</td>
+                      <td>{{hs.ho_ten}}</td>
+                      <td>{{hs.diem_toan}}</td>
+                      <td>{{hs.diem_ly}}</td>
+                      <td>{{hs.diem_hoa}}</td>
+                      <td>{{hs.diem_van}}</td>
+                      <td>{{hs.diem_ngoai_ngu}}</td>
+                      <td>{{hs.diem_tb}}</td>
+                    </tr>
+                    {% endfor %} {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+
+  {% endblock content %}
