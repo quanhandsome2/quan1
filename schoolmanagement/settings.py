@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 from operator import imod
 import os
-
+import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
@@ -154,3 +154,5 @@ EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messag
 #     from school.local_setting import *
 # except ImportError:
 #     pass
+
+django_heroku.settings(locals())
